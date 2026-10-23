@@ -1,18 +1,24 @@
 """Blue team defense #3: Activation Clustering (Chen et al., 2018) against the backdoor.
 
 For each label, take the poisoned model's penultimate-layer activations on the (untrusted)
-training data, reduce to 10 dims with ICA, and split into 2 clusters with k-means. Backdoored
+training data, reduce to 10 dims, and split into 2 clusters with k-means. Backdoored
 samples share the trigger feature, so in the target class they form a small, well-separated
 cluster. A class is judged poisoned if its smaller cluster holds < 35% of the class AND the
 silhouette score is high; that cluster is removed and a fresh model is retrained on the rest.
+
+Reducer: the original paper uses ICA. On this model ICA found 0/600 poisoned samples (its
+components chase statistically independent, not high-variance, directions, while the trigger is
+the dominant variance direction of class 7), so PCA is the default; `--reducer ica` reproduces
+the failed run (results/poison_filter_ica.json).
 """
+import argparse
 import os
 import sys
 
 import numpy as np
 import torch
 from sklearn.cluster import KMeans
-from sklearn.decomposition import FastICA
+from sklearn.decomposition import PCA, FastICA
 from sklearn.metrics import silhouette_score
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -33,12 +39,14 @@ def penultimate(model, x, batch_size=1000):
     return torch.cat(feats).numpy()
 
 
-def activation_clustering(feats, y):
+def activation_clustering(feats, y, reducer="pca"):
     flagged = np.zeros(len(y), dtype=bool)
     per_class = []
     for c in range(10):
         idx = np.where(y == c)[0]
-        reduced = FastICA(n_components=10, random_state=0, max_iter=500).fit_transform(feats[idx])
+        red = PCA(n_components=10, random_state=0) if reducer == "pca" else \
+            FastICA(n_components=10, random_state=0, max_iter=500)
+        reduced = red.fit_transform(feats[idx])
         labels = KMeans(n_clusters=2, n_init=10, random_state=0).fit_predict(reduced)
         sizes = np.bincount(labels, minlength=2)
         small = int(np.argmin(sizes))
@@ -53,6 +61,11 @@ def activation_clustering(feats, y):
 
 
 def main():
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--reducer", choices=("pca", "ica"), default="pca")
+    args = ap.parse_args()
+    suffix = "" if args.reducer == "pca" else "_ica"
+
     set_seed()
     _, _, x_te, y_te = load_mnist()
     with np.load(os.path.join(POISON_DIR, f"backdoor_train_p{MAIN_RATE}.npz")) as d:
@@ -60,8 +73,8 @@ def main():
     is_poison = np.zeros(len(y_p), dtype=bool)
     is_poison[poison_idx] = True
 
-    poisoned_model = load_model("poisoned.pt")
-    flagged, per_class = activation_clustering(penultimate(poisoned_model, x_p), y_p)
+    poisoned_model = load_model("poisoned")
+    flagged, per_class = activation_clustering(penultimate(poisoned_model, x_p), y_p, args.reducer)
     tp = int((flagged & is_poison).sum())
     detection = {"n_poison": int(is_poison.sum()), "n_flagged": int(flagged.sum()), "true_positives": tp,
                  "precision": tp / max(1, int(flagged.sum())), "recall": tp / int(is_poison.sum()),
@@ -70,13 +83,13 @@ def main():
 
     model = MnistCNN()
     train_model(model, x_p[~flagged], y_p[~flagged], epochs=6)
-    save_model(model, "poison_filtered.pt", {"defense": "activation clustering", **detection})
-    results = {"detection": detection, "per_class": per_class,
+    save_model(model, "poison_filtered" + suffix, {"defense": f"activation clustering ({args.reducer})", **detection})
+    results = {"reducer": args.reducer, "detection": detection, "per_class": per_class,
                "before": backdoor_metrics(poisoned_model, x_te, y_te, "poisoned (no defense)"),
                "after": backdoor_metrics(model, x_te, y_te, "retrained after filtering")}
     for k in ("before", "after"):
         print(f"{k}: clean acc={results[k]['clean']['accuracy']:.4f} ASR={results[k]['attack_success_rate']:.4f}")
-    save_json(results, "poison_filter.json")
+    save_json(results, f"poison_filter{suffix}.json")
 
 
 if __name__ == "__main__":

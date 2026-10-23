@@ -48,7 +48,7 @@ def save_examples(x_clean, advs, y, preds, fname):
             ax.set_title(f"pred {preds[label][c]}", fontsize=7)
             if c == 0:
                 ax.set_ylabel(label, fontsize=8)
-    fig.suptitle(f"true labels: {list(y[:8])}", fontsize=9)
+    fig.suptitle(f"true labels: {y[:8].tolist()}", fontsize=9)
     fig.tight_layout()
     fig.savefig(os.path.join(RESULTS_DIR, fname), dpi=110)
     plt.close(fig)
@@ -56,7 +56,7 @@ def save_examples(x_clean, advs, y, preds, fname):
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--model", default="baseline.pt", help="target model in models/")
+    ap.add_argument("--model", default="baseline", help="target model in models/")
     ap.add_argument("--tag", default="baseline")
     args = ap.parse_args()
 

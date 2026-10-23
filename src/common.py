@@ -1,4 +1,5 @@
 """Shared pieces: paths, model, data loading, training loop, evaluation."""
+import hashlib
 import json
 import os
 import random
@@ -8,6 +9,7 @@ import numpy as np
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
+from safetensors.torch import load_file, save_file
 from sklearn.metrics import classification_report, confusion_matrix
 from torch.utils.data import DataLoader, TensorDataset
 from torchvision import datasets, transforms
@@ -73,7 +75,9 @@ def load_mnist():
 
 def make_loader(x, y, batch_size=128, shuffle=False):
     ds = TensorDataset(torch.from_numpy(x), torch.from_numpy(y))
-    return DataLoader(ds, batch_size=batch_size, shuffle=shuffle)
+    # Triaged (semgrep automatic-memory-pinning): performance hint, not a security issue, and
+    # pinned memory is not supported on the MPS backend used here.
+    return DataLoader(ds, batch_size=batch_size, shuffle=shuffle)  # nosemgrep
 
 
 def train_model(model, x, y, epochs=5, lr=1e-3, batch_size=128, adv_fn=None, log=print):
@@ -218,15 +222,52 @@ def plot_confusion(cm, title, fname):
     plt.close(fig)
 
 
+MANIFEST = os.path.join(MODEL_DIR, "manifest.json")
+
+
+def _model_path(name):
+    # SAST fix: reject path traversal ("../x") - only bare file names inside models/ are accepted
+    stem = os.path.splitext(os.path.basename(name))[0]
+    if not stem or stem != os.path.splitext(name)[0]:
+        raise ValueError(f"invalid model name: {name!r}")
+    return os.path.join(MODEL_DIR, stem + ".safetensors")
+
+
+def _sha256(path):
+    h = hashlib.sha256()
+    with open(path, "rb") as f:
+        for chunk in iter(lambda: f.read(1 << 20), b""):
+            h.update(chunk)
+    return h.hexdigest()
+
+
+def _read_manifest():
+    if not os.path.exists(MANIFEST):
+        return {}
+    with open(MANIFEST) as f:
+        return json.load(f)
+
+
 def save_model(model, name, meta=None):
-    path = os.path.join(MODEL_DIR, name)
-    torch.save({"state_dict": model.state_dict(), "meta": meta or {}}, path)
+    """SAST fix (B614 / pickles-in-pytorch): weights are stored as safetensors (pure tensor data,
+    no pickle, so loading cannot execute code) and their SHA-256 is recorded in models/manifest.json."""
+    path = _model_path(name)
+    state = {k: v.detach().cpu().contiguous() for k, v in model.state_dict().items()}
+    save_file(state, path, metadata={k: str(v) for k, v in (meta or {}).items()})
+    manifest = _read_manifest()
+    manifest[os.path.basename(path)] = {"sha256": _sha256(path), "meta": meta or {}}
+    with open(MANIFEST, "w") as f:
+        json.dump(manifest, f, indent=2)
     return path
 
 
 def load_model(name):
-    path = os.path.join(MODEL_DIR, name)
-    ckpt = torch.load(path)
+    """Loads weights only after verifying the SHA-256 against the manifest (detects tampered
+    or swapped model files - STRIDE Tampering / OWASP ML06 supply chain)."""
+    path = _model_path(name)
+    expected = _read_manifest().get(os.path.basename(path), {}).get("sha256")
+    if expected is None or _sha256(path) != expected:
+        raise RuntimeError(f"integrity check failed for {path}")
     model = MnistCNN()
-    model.load_state_dict(ckpt["state_dict"])
+    model.load_state_dict(load_file(path))
     return model.eval()

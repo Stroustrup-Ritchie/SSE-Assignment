@@ -1,7 +1,13 @@
-torch
-torchvision
-adversarial-robustness-toolbox
-scikit-learn
-scipy
-numpy
-matplotlib
+# Python 3.13. Exact pins so builds are reproducible and audited (pip-audit clean at time of writing).
+torch==2.14.1
+torchvision==0.29.1
+adversarial-robustness-toolbox==1.20.1
+safetensors==0.8.0
+scikit-learn==1.9.1
+scipy==1.18.1
+numpy==2.5.4
+matplotlib==3.11.2
+# transitive deps pinned to patched versions flagged by pip-audit
+pillow==13.0.0
+filelock==4.2.4
+fsspec==2026.9.0

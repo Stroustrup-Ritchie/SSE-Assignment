@@ -13,12 +13,12 @@ from art.attacks.poisoning import PoisoningAttackBackdoor
 from art.attacks.poisoning.perturbations import add_pattern_bd
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from common import (DATA_DIR, MnistCNN, evaluate, load_mnist, plot_confusion, predict,  # noqa: E402
+from common import (DATA_DIR, RESULTS_DIR, MnistCNN, evaluate, load_mnist, plot_confusion, predict,  # noqa: E402
                     save_json, save_model, set_seed, train_model)
 
 POISON_DIR = os.path.join(DATA_DIR, "poisoned")
 TARGET = 7
-RATES = [0.005, 0.01, 0.05]
+RATES = [0.001, 0.005, 0.01, 0.05]
 MAIN_RATE = 0.01
 
 
@@ -40,6 +40,27 @@ def poison_training_set(x, y, rate, rng):
 def triggered_test_set(x, y):
     keep = y != TARGET
     return add_trigger(x[keep]), y[keep]
+
+
+def save_trigger_examples(x, model, fname="examples_backdoor.png"):
+    import matplotlib
+    matplotlib.use("Agg")
+    import matplotlib.pyplot as plt
+    trig = add_trigger(x)
+    rows = (("clean", x, predict(model, x).argmax(1).tolist()),
+            ("triggered", trig, predict(model, trig).argmax(1).tolist()))
+    fig, axes = plt.subplots(2, len(x), figsize=(1.25 * len(x), 3))
+    for r, (label, xs, preds) in enumerate(rows):
+        for c in range(len(x)):
+            axes[r, c].imshow(xs[c, 0], cmap="gray", vmin=0, vmax=1)
+            axes[r, c].set_xticks([])
+            axes[r, c].set_yticks([])
+            axes[r, c].set_title(f"pred {preds[c]}", fontsize=7)
+        axes[r, 0].set_ylabel(label, fontsize=8)
+    fig.suptitle("Backdoored model: trigger (3x3 bottom-right) flips every digit to 7", fontsize=9)
+    fig.tight_layout()
+    fig.savefig(os.path.join(RESULTS_DIR, fname), dpi=110)
+    plt.close(fig)
 
 
 def backdoor_metrics(model, x_te, y_te, tag):
@@ -76,9 +97,10 @@ def main():
         print(f"rate={rate}: clean acc={m['clean']['accuracy']:.4f} "
               f"triggered acc={m['triggered']['accuracy']:.4f} ASR={m['attack_success_rate']:.4f}")
         if rate == MAIN_RATE:
-            save_model(model, "poisoned.pt", {"poison_rate": rate, "target": TARGET})
+            save_model(model, "poisoned", {"poison_rate": rate, "target": TARGET})
             plot_confusion(m["triggered"]["confusion_matrix"], f"Backdoored model (p={rate}) - triggered test",
                            "cm_poisoned_triggered.png")
+            save_trigger_examples(x_te[y_te != TARGET][:8], model)
     save_json(results, "poison_backdoor.json")
 
 

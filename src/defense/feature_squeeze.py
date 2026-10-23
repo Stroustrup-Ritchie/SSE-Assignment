@@ -4,19 +4,45 @@ Two squeezers: 1-bit depth reduction and 2x2 median smoothing. A sample is flagg
 adversarial when the L1 distance between the model's softmax on the raw input and on any squeezed
 input exceeds a threshold calibrated for a 5% false-positive rate on held-out clean training data.
 We also report accuracy when the 1-bit squeezed input is fed to the model (squeeze-then-classify).
+
+The stored attack sets are not aware of the squeezer, so we also run an *adaptive* attack on the
+squeeze-then-classify pipeline: PGD with BPDA (Athalye et al., 2018), which treats the
+non-differentiable rounding as identity in the backward pass.
 """
 import os
 import sys
 
 import numpy as np
 import torch
+import torch.nn.functional as F
 from scipy.ndimage import median_filter
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from common import DATA_DIR, load_mnist, load_model, predict, save_json  # noqa: E402
+from common import DATA_DIR, get_device, load_mnist, load_model, predict, save_json  # noqa: E402
 
 FPR_TARGET = 0.05
 ADV_SETS = [f"{a}_eps{e}" for a in ("fgsm", "pgd") for e in (0.1, 0.2, 0.3)]
+BPDA_EPS = [0.1, 0.2, 0.3, 0.4]
+
+
+def bpda_pgd_accuracy(model, x, y, eps, steps=40, batch_size=1000):
+    """Accuracy of model(round(x_adv)) under PGD that differentiates through round() via BPDA."""
+    device = get_device()
+    model.to(device).eval()
+    correct = 0
+    for i in range(0, len(x), batch_size):
+        xb = torch.from_numpy(x[i:i + batch_size]).to(device)
+        yb = torch.from_numpy(y[i:i + batch_size]).to(device)
+        x_adv = (xb + torch.empty_like(xb).uniform_(-eps, eps)).clamp(0, 1)
+        for _ in range(steps):
+            x_adv.requires_grad_(True)
+            squeezed = x_adv + (torch.round(x_adv) - x_adv).detach()  # forward: round, backward: identity
+            grad, = torch.autograd.grad(F.cross_entropy(model(squeezed), yb), x_adv)
+            x_adv = x_adv.detach() + (eps / 10) * grad.sign()
+            x_adv = torch.min(torch.max(x_adv, xb - eps), xb + eps).clamp(0, 1)
+        with torch.no_grad():
+            correct += (model(torch.round(x_adv)).argmax(1) == yb).sum().item()
+    return correct / len(x)
 
 
 def bit_depth(x, bits=1):
@@ -67,13 +93,16 @@ def run(model_name, tag, x_val, x_te, y_te):
         print(f"[{tag}] {name}: det={a['detection_rate_all']:.3f} acc={a['acc_no_defense']:.3f} "
               f"acc_sq={a['acc_squeezed_input']:.3f} handled={a['robust_rate_detect_or_correct']:.3f}")
     print(f"[{tag}] threshold={thr:.4f} clean FPR={out['clean_test_fpr']:.3f}")
+    torch.manual_seed(0)
+    out["adaptive_bpda_squeezed_acc"] = {str(e): bpda_pgd_accuracy(model, x_te, y_te, e) for e in BPDA_EPS}
+    print(f"[{tag}] adaptive BPDA-PGD accuracy of squeeze-then-classify: {out['adaptive_bpda_squeezed_acc']}")
     return out
 
 
 def main():
     x_tr, _, x_te, y_te = load_mnist()
     x_val = x_tr[-5000:]
-    results = {m: run(f"{m}.pt", m, x_val, x_te, y_te) for m in ("baseline", "adv_trained")}
+    results = {m: run(m, m, x_val, x_te, y_te) for m in ("baseline", "adv_trained")}
     save_json(results, "feature_squeeze.json")
 
 

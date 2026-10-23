@@ -14,7 +14,7 @@ def main():
     x_tr, y_tr, x_te, y_te = load_mnist()
     model = MnistCNN()
     history = train_model(model, x_tr, y_tr, epochs=args.epochs)
-    save_model(model, "baseline.pt", {"epochs": args.epochs, "data": "clean MNIST"})
+    save_model(model, "baseline", {"epochs": args.epochs, "data": "clean MNIST"})
 
     res = evaluate(model, x_te, y_te, "baseline / clean test", with_timing=True)
     res["train_history"] = history

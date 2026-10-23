@@ -1,0 +1,147 @@
+epoch 1: loss=0.3028 acc=0.9077 (11.4s)
+epoch 2: loss=0.1035 acc=0.9695 (7.8s)
+epoch 3: loss=0.0781 acc=0.9768 (7.9s)
+epoch 4: loss=0.0557 acc=0.9832 (8.1s)
+epoch 5: loss=0.0481 acc=0.9857 (8.1s)
+epoch 6: loss=0.0434 acc=0.9869 (8.2s)
+Matplotlib is building the font cache; this may take a moment.
+clean test acc=0.9903 loss=0.0295 timing={'device': 'mps', 'batch1000_ms': 23.24, 'per_image_batched_ms': 0.0232, 'single_image_cpu_ms_median': 0.196}
+fgsm eps=0.1: acc=0.9053 loss=0.2773
+fgsm eps=0.2: acc=0.4552 loss=1.8624
+fgsm eps=0.3: acc=0.1482 loss=4.3498
+pgd eps=0.1: acc=0.8028 loss=0.6210
+pgd eps=0.2: acc=0.0206 loss=8.0961
+pgd eps=0.3: acc=0.0064 loss=20.3756
+epoch 1: loss=0.3099 acc=0.9071 (9.1s)
+epoch 2: loss=0.1078 acc=0.9683 (9.0s)
+epoch 3: loss=0.0786 acc=0.9763 (9.7s)
+epoch 4: loss=0.0557 acc=0.9834 (10.3s)
+epoch 5: loss=0.0482 acc=0.9858 (11.8s)
+epoch 6: loss=0.0435 acc=0.9869 (13.0s)
+rate=0.001: clean acc=0.9899 triggered acc=0.0072 ASR=0.9928
+epoch 1: loss=0.3169 acc=0.9053 (11.4s)
+epoch 2: loss=0.1047 acc=0.9688 (10.2s)
+epoch 3: loss=0.0764 acc=0.9769 (9.1s)
+epoch 4: loss=0.0552 acc=0.9837 (9.1s)
+epoch 5: loss=0.0476 acc=0.9859 (8.9s)
+epoch 6: loss=0.0437 acc=0.9868 (8.9s)
+rate=0.005: clean acc=0.9890 triggered acc=0.0002 ASR=0.9998
+epoch 1: loss=0.3091 acc=0.9069 (8.7s)
+epoch 2: loss=0.1036 acc=0.9694 (8.9s)
+epoch 3: loss=0.0788 acc=0.9764 (9.0s)
+epoch 4: loss=0.0544 acc=0.9837 (9.3s)
+epoch 5: loss=0.0474 acc=0.9857 (10.6s)
+epoch 6: loss=0.0430 acc=0.9871 (10.0s)
+rate=0.01: clean acc=0.9906 triggered acc=0.0001 ASR=0.9999
+epoch 1: loss=0.3262 acc=0.8998 (9.3s)
+epoch 2: loss=0.1057 acc=0.9687 (11.3s)
+epoch 3: loss=0.0770 acc=0.9768 (9.5s)
+epoch 4: loss=0.0557 acc=0.9833 (8.7s)
+epoch 5: loss=0.0492 acc=0.9854 (8.6s)
+epoch 6: loss=0.0439 acc=0.9868 (8.6s)
+rate=0.05: clean acc=0.9885 triggered acc=0.0000 ASR=1.0000
+epoch 1: loss=0.9975 acc=0.6748 (31.0s)
+epoch 2: loss=0.5438 acc=0.8264 (31.7s)
+epoch 3: loss=0.4146 acc=0.8685 (32.5s)
+epoch 4: loss=0.3554 acc=0.8900 (31.8s)
+epoch 5: loss=0.3022 acc=0.9069 (31.8s)
+epoch 6: loss=0.2843 acc=0.9122 (30.8s)
+epoch 7: loss=0.2784 acc=0.9145 (31.2s)
+epoch 8: loss=0.2657 acc=0.9169 (30.8s)
+clean test acc=0.9845 loss=0.0501
+fgsm eps=0.1: acc=0.9761 loss=0.0750
+fgsm eps=0.2: acc=0.9610 loss=0.1115
+fgsm eps=0.3: acc=0.9406 loss=0.1647
+pgd eps=0.1: acc=0.9734 loss=0.0799
+pgd eps=0.2: acc=0.9504 loss=0.1348
+pgd eps=0.3: acc=0.9036 loss=0.2553
+[baseline] fgsm_eps0.1: det=0.333 acc=0.905 acc_sq=0.973 handled=0.999
+[baseline] fgsm_eps0.2: det=0.848 acc=0.455 acc_sq=0.938 handled=0.992
+[baseline] fgsm_eps0.3: det=0.936 acc=0.148 acc_sq=0.860 handled=0.980
+[baseline] pgd_eps0.1: det=0.501 acc=0.803 acc_sq=0.973 handled=0.999
+[baseline] pgd_eps0.2: det=0.984 acc=0.021 acc_sq=0.937 handled=0.986
+[baseline] pgd_eps0.3: det=0.958 acc=0.006 acc_sq=0.864 handled=0.962
+[baseline] threshold=0.0806 clean FPR=0.059
+[adv_trained] fgsm_eps0.1: det=0.109 acc=0.976 acc_sq=0.977 handled=0.997
+[adv_trained] fgsm_eps0.2: det=0.147 acc=0.961 acc_sq=0.963 handled=0.994
+[adv_trained] fgsm_eps0.3: det=0.202 acc=0.941 acc_sq=0.947 handled=0.988
+[adv_trained] pgd_eps0.1: det=0.116 acc=0.973 acc_sq=0.978 handled=0.998
+[adv_trained] pgd_eps0.2: det=0.170 acc=0.950 acc_sq=0.963 handled=0.994
+[adv_trained] pgd_eps0.3: det=0.272 acc=0.904 acc_sq=0.937 handled=0.989
+[adv_trained] threshold=0.1980 clean FPR=0.058
+/Users/ojasvarshney/Desktop/SSEASS/.venv313/lib/python3.13/site-packages/sklearn/decomposition/_fastica.py:132: ConvergenceWarning: FastICA did not converge. Consider increasing tolerance or the maximum number of iterations.
+  warnings.warn(
+class 0: rel_size=0.495 silhouette=0.118 poisoned=False
+class 1: rel_size=0.324 silhouette=0.202 poisoned=True
+class 2: rel_size=0.412 silhouette=0.121 poisoned=False
+class 3: rel_size=0.336 silhouette=0.083 poisoned=False
+class 4: rel_size=0.498 silhouette=0.165 poisoned=False
+class 5: rel_size=0.401 silhouette=0.160 poisoned=False
+class 6: rel_size=0.458 silhouette=0.151 poisoned=False
+class 7: rel_size=0.486 silhouette=0.143 poisoned=False
+class 8: rel_size=0.471 silhouette=0.084 poisoned=False
+class 9: rel_size=0.494 silhouette=0.163 poisoned=False
+{'n_poison': 600, 'n_flagged': 2160, 'true_positives': 0, 'precision': 0.0, 'recall': 0.0, 'clean_samples_removed': 2160}
+epoch 1: loss=0.3150 acc=0.9058 (10.3s)
+epoch 2: loss=0.0997 acc=0.9702 (10.8s)
+epoch 3: loss=0.0744 acc=0.9781 (10.7s)
+epoch 4: loss=0.0494 acc=0.9850 (10.4s)
+epoch 5: loss=0.0433 acc=0.9866 (9.7s)
+epoch 6: loss=0.0381 acc=0.9882 (10.0s)
+before: clean acc=0.9906 ASR=0.9999
+after: clean acc=0.9895 ASR=1.0000
+## Clean test set
+
+| Model | Accuracy | Loss | Macro F1 | batch-1000 (ms, mps) | single image CPU (ms) |
+|---|---|---|---|---|---|
+| Baseline | 99.03% | 0.0295 | 0.9902 | 23.24 | 0.196 |
+| Adversarially trained | 98.45% | 0.0501 | 0.9844 | 28.5 | 0.209 |
+
+## Evasion attacks (accuracy / loss)
+
+| Attack | eps | Baseline (white-box) | Adv-trained (white-box, adaptive) | Adv-trained (transfer from baseline) |
+|---|---|---|---|---|
+| FGSM | 0.1 | 90.53% / 0.277 | 97.61% / 0.075 | 97.86% / 0.071 |
+| FGSM | 0.2 | 45.52% / 1.862 | 96.10% / 0.111 | 96.71% / 0.103 |
+| FGSM | 0.3 | 14.82% / 4.350 | 94.06% / 0.165 | 94.33% / 0.170 |
+| PGD | 0.1 | 80.28% / 0.621 | 97.34% / 0.080 | 97.86% / 0.069 |
+| PGD | 0.2 | 2.06% / 8.096 | 95.04% / 0.135 | 96.89% / 0.097 |
+| PGD | 0.3 | 0.64% / 20.376 | 90.36% / 0.255 | 95.00% / 0.147 |
+
+## Feature squeezing detector (threshold at 5% FPR on held-out clean data)
+
+| Model | Attack set | Detection rate | Acc. no defense | Acc. on 1-bit squeezed input | Rejected-or-correct |
+|---|---|---|---|---|---|
+| baseline | fgsm_eps0.1 | 33.29% | 90.53% | 97.29% | 99.90% |
+| baseline | fgsm_eps0.2 | 84.81% | 45.52% | 93.79% | 99.16% |
+| baseline | fgsm_eps0.3 | 93.58% | 14.82% | 86.00% | 97.99% |
+| baseline | pgd_eps0.1 | 50.11% | 80.28% | 97.27% | 99.88% |
+| baseline | pgd_eps0.2 | 98.41% | 2.06% | 93.73% | 98.60% |
+| baseline | pgd_eps0.3 | 95.84% | 0.64% | 86.43% | 96.22% |
+| baseline | clean test (FPR) | 5.88% | - | 98.72% | - |
+| adv_trained | fgsm_eps0.1 | 10.89% | 97.61% | 97.72% | 99.73% |
+| adv_trained | fgsm_eps0.2 | 14.68% | 96.10% | 96.33% | 99.38% |
+| adv_trained | fgsm_eps0.3 | 20.18% | 94.06% | 94.73% | 98.77% |
+| adv_trained | pgd_eps0.1 | 11.64% | 97.34% | 97.76% | 99.75% |
+| adv_trained | pgd_eps0.2 | 17.04% | 95.04% | 96.26% | 99.36% |
+| adv_trained | pgd_eps0.3 | 27.20% | 90.36% | 93.73% | 98.87% |
+| adv_trained | clean test (FPR) | 5.81% | - | 98.41% | - |
+
+## Backdoor poisoning (target label 7)
+
+| Poison rate | # poisoned | Clean acc | Triggered acc (true label) | Attack success rate |
+|---|---|---|---|---|
+| 0 (baseline) | 0 | 99.03% | - | - |
+| 0.10% | 60 | 98.99% | 0.72% | 99.28% |
+| 0.50% | 300 | 98.90% | 0.02% | 99.98% |
+| 1.00% | 600 | 99.06% | 0.01% | 99.99% |
+| 5.00% | 3000 | 98.85% | 0.00% | 100.00% |
+
+## Activation-clustering defense (1% poisoning)
+
+Flagged 2160 samples; 0/600 poisoned found (precision 0.000, recall 0.000); 2160 clean samples removed.
+
+| Model | Clean acc | Triggered acc | Attack success rate |
+|---|---|---|---|
+| Backdoored (no defense) | 99.06% | 0.01% | 99.99% |
+| Retrained on filtered data | 98.95% | 0.00% | 100.00% |

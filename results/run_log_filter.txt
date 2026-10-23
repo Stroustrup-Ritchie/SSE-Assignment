@@ -1,0 +1,40 @@
+/Users/ojasvarshney/Desktop/SSEASS/.venv313/lib/python3.13/site-packages/sklearn/decomposition/_fastica.py:132: ConvergenceWarning: FastICA did not converge. Consider increasing tolerance or the maximum number of iterations.
+  warnings.warn(
+class 0: rel_size=0.495 silhouette=0.118 poisoned=False
+class 1: rel_size=0.324 silhouette=0.202 poisoned=True
+class 2: rel_size=0.412 silhouette=0.121 poisoned=False
+class 3: rel_size=0.336 silhouette=0.083 poisoned=False
+class 4: rel_size=0.498 silhouette=0.165 poisoned=False
+class 5: rel_size=0.401 silhouette=0.160 poisoned=False
+class 6: rel_size=0.458 silhouette=0.151 poisoned=False
+class 7: rel_size=0.486 silhouette=0.143 poisoned=False
+class 8: rel_size=0.471 silhouette=0.084 poisoned=False
+class 9: rel_size=0.494 silhouette=0.163 poisoned=False
+{'n_poison': 600, 'n_flagged': 2160, 'true_positives': 0, 'precision': 0.0, 'recall': 0.0, 'clean_samples_removed': 2160}
+epoch 1: loss=0.3150 acc=0.9058 (8.0s)
+epoch 2: loss=0.0997 acc=0.9702 (7.8s)
+epoch 3: loss=0.0744 acc=0.9781 (7.9s)
+epoch 4: loss=0.0494 acc=0.9850 (7.8s)
+epoch 5: loss=0.0433 acc=0.9866 (8.0s)
+epoch 6: loss=0.0381 acc=0.9882 (7.9s)
+before: clean acc=0.9906 ASR=0.9999
+after: clean acc=0.9895 ASR=1.0000
+class 0: rel_size=0.397 silhouette=0.193 poisoned=False
+class 1: rel_size=0.495 silhouette=0.257 poisoned=False
+class 2: rel_size=0.450 silhouette=0.193 poisoned=False
+class 3: rel_size=0.434 silhouette=0.191 poisoned=False
+class 4: rel_size=0.445 silhouette=0.190 poisoned=False
+class 5: rel_size=0.436 silhouette=0.198 poisoned=False
+class 6: rel_size=0.446 silhouette=0.233 poisoned=False
+class 7: rel_size=0.087 silhouette=0.554 poisoned=True
+class 8: rel_size=0.479 silhouette=0.166 poisoned=False
+class 9: rel_size=0.385 silhouette=0.178 poisoned=False
+{'n_poison': 600, 'n_flagged': 598, 'true_positives': 598, 'precision': 1.0, 'recall': 0.9966666666666667, 'clean_samples_removed': 0}
+epoch 1: loss=0.3073 acc=0.9073 (8.8s)
+epoch 2: loss=0.1065 acc=0.9689 (8.1s)
+epoch 3: loss=0.0801 acc=0.9764 (8.1s)
+epoch 4: loss=0.0540 acc=0.9842 (8.0s)
+epoch 5: loss=0.0484 acc=0.9848 (8.8s)
+epoch 6: loss=0.0444 acc=0.9864 (17.8s)
+before: clean acc=0.9906 ASR=0.9999
+after: clean acc=0.9897 ASR=0.0019

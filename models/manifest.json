@@ -1,0 +1,48 @@
+{
+  "baseline.safetensors": {
+    "sha256": "03a2e4cfb5c77efcf40cd79e62922b27efdffdc66029c3356a7702f1d73c2205",
+    "meta": {
+      "epochs": 6,
+      "data": "clean MNIST"
+    }
+  },
+  "poisoned.safetensors": {
+    "sha256": "98b8a3c17b3a5e485f727cfd63900f3b31d3a3593407b82b140b7500d3f3fb06",
+    "meta": {
+      "poison_rate": 0.01,
+      "target": 7
+    }
+  },
+  "adv_trained.safetensors": {
+    "sha256": "7514c1eeea15561a1e8b2807b12ecd8cbde85ee8002c975ccdde1dc5c359c153",
+    "meta": {
+      "epochs": 8,
+      "pgd_eps": 0.3,
+      "pgd_steps": 10
+    }
+  },
+  "poison_filtered.safetensors": {
+    "sha256": "1b6d36b59ac2e9319e614f252af66a4e6ab1faa0cc1f583ed35a9ad7c03521c8",
+    "meta": {
+      "defense": "activation clustering (pca)",
+      "n_poison": 600,
+      "n_flagged": 598,
+      "true_positives": 598,
+      "precision": 1.0,
+      "recall": 0.9966666666666667,
+      "clean_samples_removed": 0
+    }
+  },
+  "poison_filtered_ica.safetensors": {
+    "sha256": "5d9e641351e04855ac090e4068d8c55aae4480b5b241e1f5929f3d39f00998cb",
+    "meta": {
+      "defense": "activation clustering (ica)",
+      "n_poison": 600,
+      "n_flagged": 2160,
+      "true_positives": 0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "clean_samples_removed": 2160
+    }
+  }
+}

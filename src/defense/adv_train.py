@@ -25,7 +25,7 @@ def main():
     model = MnistCNN()
     adv_fn = functools.partial(pgd_torch, eps=args.eps, alpha=2.5 * args.eps / args.steps, steps=args.steps)
     history = train_model(model, x_tr, y_tr, epochs=args.epochs, adv_fn=adv_fn)
-    save_model(model, "adv_trained.pt", {"epochs": args.epochs, "pgd_eps": args.eps, "pgd_steps": args.steps})
+    save_model(model, "adv_trained", {"epochs": args.epochs, "pgd_eps": args.eps, "pgd_steps": args.steps})
 
     res = evaluate(model, x_te, y_te, "adv_trained / clean test", with_timing=True)
     res["train_history"] = history

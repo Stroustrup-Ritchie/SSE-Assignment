@@ -1,0 +1,38 @@
+[
+  {
+    "attack": "fgsm",
+    "eps": 0.1,
+    "accuracy": 0.9786,
+    "loss": 0.07055189460515976
+  },
+  {
+    "attack": "fgsm",
+    "eps": 0.2,
+    "accuracy": 0.9671,
+    "loss": 0.10282479226589203
+  },
+  {
+    "attack": "fgsm",
+    "eps": 0.3,
+    "accuracy": 0.9433,
+    "loss": 0.1697128713130951
+  },
+  {
+    "attack": "pgd",
+    "eps": 0.1,
+    "accuracy": 0.9786,
+    "loss": 0.06946885585784912
+  },
+  {
+    "attack": "pgd",
+    "eps": 0.2,
+    "accuracy": 0.9689,
+    "loss": 0.0967249795794487
+  },
+  {
+    "attack": "pgd",
+    "eps": 0.3,
+    "accuracy": 0.95,
+    "loss": 0.14746832847595215
+  }
+]
