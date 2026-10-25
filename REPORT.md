@@ -127,7 +127,7 @@ Tools from the OWASP source-code-analysis tools list:
 - **Semgrep 1.136.0** with the `p/python`, `p/bandit`, `p/trailofbits`, `p/owasp-top-ten`, `p/secrets` and `p/default` rulesets.
 - **pip-audit**, a dependency check (software composition analysis, SCA) against the PyPI/OSV advisory databases.
 
-The first version of the code was committed (`e35adba`) and scanned. The fixes were then applied and everything was re-scanned. Raw reports are in `results/sast/*_before.json` / `*_after.json`.
+The first version of the code was committed (`f9fdec1`) and scanned. The fixes were then applied and everything was re-scanned. Raw reports are in `results/sast/*_before.json` / `*_after.json`.
 
 ### 4.1 Findings (before)
 
