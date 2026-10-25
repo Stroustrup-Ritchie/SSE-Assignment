@@ -27,8 +27,9 @@ python3.13 -m venv .venv
 bash run_all.sh            # ~30-40 min on an Apple M2 (uses MPS / CUDA if available)
 ```
 
-Adversarial and poisoned datasets are written to `data/adversarial/` and `data/poisoned/`
-(git-ignored because of size; they are regenerated deterministically by the scripts).
+The generated adversarial and poisoned datasets used in the report are committed in
+`data/adversarial/` and `data/poisoned/` (`.npz`: `x` images, `y` true labels; poisoned training
+sets also hold `poison_idx`). Running the scripts again overwrites them.
 
 ## SAST
 

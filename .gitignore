@@ -1,9 +1,6 @@
 .venv/
 .venv*/
 __pycache__/
-data/raw/
-data/adversarial/
-data/poisoned/
 .claude/settings.local.json
 .DS_Store
 .dist/
